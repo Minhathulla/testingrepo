@@ -1,0 +1,201 @@
+{
+	"info": {
+		"_postman_id": "7147e9be-934f-4174-a8b7-264c5a05455f",
+		"name": "CRUD",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23328877"
+	},
+	"item": [
+		{
+			"name": "create employee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"get Id into global\",()=>{\r",
+							"    var jsonData=pm.response.json();\r",
+							"  \r",
+							"    console.log(\"json body data::\"+JSON.stringify(jsonData));\r",
+							"\r",
+							"\r",
+							"     var returnid=jsonData.data.id;\r",
+							"\r",
+							"     console.log(returnid);\r",
+							"\r",
+							"    pm.globals.set(\"returnId\",returnid);\r",
+							"    console.log(pm.globals.get(\"returnId\"));\r",
+							"\r",
+							"    if(returnid){\r",
+							"    postman.setNextRequest(\"get_employee_with_id\");\r",
+							"    console.log(\"here is id:\"+returnid);\r",
+							"\r",
+							"    }\r",
+							"    else{\r",
+							"        console.log(\"not executed\")\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var name=\"TestName\"+\"{{$randomInt}}\";\r",
+							"pm.globals.set(\"uniqueName\",name);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\t{\"name\":\"{{uniqueName}}\",\"salary\":\"123\",\"age\":\"23\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlcrud}}/create",
+					"host": [
+						"{{urlcrud}}"
+					],
+					"path": [
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_employee_with_id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"get_employee\",()=>{\r",
+							"    var respo=pm.response.json();\r",
+							"\r",
+							"\r",
+							"console.log(JSON.stringify(respo));\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{urlcrud}}/employee/{{returnId}}",
+					"host": [
+						"{{urlcrud}}"
+					],
+					"path": [
+						"employee",
+						"{{returnId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update_employee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"updated\",()=>{\r",
+							"    var updatedRes=pm.response.json();\r",
+							"\r",
+							"console.log(\"updated\"+JSON.stringify(updatedRes));\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"test\",\"salary\":\"676767\",\"age\":\"30\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlcrud}}/update/{{returnId}}",
+					"host": [
+						"{{urlcrud}}"
+					],
+					"path": [
+						"update",
+						"{{returnId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"delete\",()=>{\r",
+							"    var respdel=pm.response.json();\r",
+							"    console.log(\"deleted:\"+JSON.stringify(respdel));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{urlcrud}}/employee/{{returnId}}",
+					"host": [
+						"{{urlcrud}}"
+					],
+					"path": [
+						"employee",
+						"{{returnId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
